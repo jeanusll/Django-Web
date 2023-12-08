@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-
+from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import get_object_or_404
 from ..models import User 
 from ..serializers.User_serializer import UserSerializer
@@ -35,7 +35,7 @@ def signup(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
-def login(request):
+def login(request):    
     user = get_object_or_404(User, username=request.data['username'])
     if not user.check_password(request.data['password']):
         return Response("Invalid credentials", status=status.HTTP_404_NOT_FOUND)
@@ -49,7 +49,7 @@ def login(request):
 
     serializer = UserSerializer(user)
     
-    response = JsonResponse({'token': token, 'user': serializer.data})
+    response = JsonResponse(serializer.data)
     response.set_cookie('token', token, httponly=True)  
     
     return response
