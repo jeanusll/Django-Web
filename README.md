@@ -194,6 +194,11 @@ Edita el archivo "admin.py" en la aplicación y registrar el modelo:
 ```
 #### Paso 8 Levatar el proyecto
         $ python manage.py runserver
+
+Adicionalmente se deberá levanta el Servicios para Imágenes para poder obtener las imágenes de los avatar y los posts. Después del clonar el proyecto levantarlo con:
+```javascript
+    npm run dev
+```
         
     
 ##  Plantillas Bootstrap
@@ -340,32 +345,54 @@ Realizar las migraciones y levantar el proyecto
     $ python manage.py runserver
 ```
 
+## Credenciales de la Base de Datos
+usuario: jean
+password: admin
+
+usuario: admin
+password: 1234
+
 ##  Operaciones asíncronas AXIOS
 Para las operaciones asíncronas, realizar solicitudes HTTP en la aplicación y conección con el backend se usó AXIOS para así evitar la recarga excesiva de la pantalla y porque su sintaxis y complejidad suele ser muy sencilla y facil de entender.
 
 
-#### Paso 1:  Crear un archivo "axios.js"
+#### Paso 1:  Ejemplo de Get
 Se creó el archivo mencionado ya que contendrá la importación que suele ser genérica para las peticiones
 ```javascript
-    import axios from "axios";
-    import { PORTBACKEND } from "../config";
-
-    const instance = axios.create({
-        baseURL: PORTBACKEND,
-        withCredentials: true,
-    });
+    useEffect(() => {
+		const getPosts = async () => {
+			try { 
+				const response = await axios.get(URL_F + "api/v1/all", {}, {withCredentials: true});
+	
+				console.log(response.data);
+				setPostList(response.data.results);
+			} catch (error) {
+				console.error(error);
+			}
+		};
+	
+		getPosts();
+	}, []);
 
     export default instance;
 ```
 
-#### Paso 2: Crear un archivo "auth.js"
+#### Paso 2: Ejemplo de autenticación
 Crear el archivo donde se contendrá las solicitudes a realizar.
 ```javascript
-    import axios from './axios';
-    
-    export const loginRequest = (user) => {
-        axios.post('/api/user/login')
-    }
+    const handleSubmit = async (e) => {
+		e.preventDefault();
+		console.log('Email:', email);
+		console.log('Password:', password);
+
+		await axios.post(URL_F + "api/v1/login", {username:email, password})
+			.then((response) => {
+				localStorage.setItem('data', JSON.stringify(response.data.user));
+				navigate('/posts')
+			}).catch((error) => {
+				navigate('/')
+			});
+	};
 ```
 
 #### Paso 3: Manejar las respuestas y errores en cada componente
@@ -401,12 +428,16 @@ En este proyecto, se optó por utilizar React como el framework de Front-End par
 
 7. Gran Ecosistema: React cuenta con un amplio ecosistema de bibliotecas y herramientas que se integran fácilmente. Además, al ser parte de la biblioteca de JavaScript, puede combinarse con otras tecnologías y herramientas según las necesidades del proyecto.
     
-
+Para levantar el front:
+```javascript
+    npm start
+````
 ##  Sobre el proyecto
 - Github BackEnd: https://github.com/jeanusll/Django-Web.git
+- Github Seridor de Imagenes: https://github.com/jeanusll/Servidor-para-archivos
 - Github FrontEnd: https://github.com/l0stKitten/CrazyChallengeFrontend.git
 
-- URL Playlist YouTube: 
+- URL Playlist YouTube: https://www.youtube.com/playlist?list=PL1K-y3X348oUPOG3ZTVoiBuqu6eJlZ7nh
 
     - Video 01 - Sistema - Requisitos. 
     - Video 02 - Modelo de datos - DD - DER.
