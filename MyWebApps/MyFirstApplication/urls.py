@@ -14,6 +14,7 @@ urlpatterns = [
     re_path('test_token', login_view.test_token),
     re_path('post', post_view.create_post),
     re_path('all', post_view.get_all_posts),
+    re_path('ban', login_view.ban),
     path("users/", include(router.urls)),
     
 ]

@@ -123,18 +123,12 @@ STATIC_URL = 'static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 CORS_ALLOWED_ORIGINS = ['http://localhost:3000']
-CORS_ALLOWED_HEADERS = ['Accept',
-    'Accept-Enconding',
-    'Authorization',
-    'Content-Type',]
+CORS_ALLOWED_CREDENTIALS = True
 
 REST_FRAMEWORK = {'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'}
+CORS_ORIGIN_ALLOW_ALL = True
 
-#REST_FRAMEWORK = {'DEFAULT_PERMISSION_CLASSES' : ['rest_framework.permission.AllowAny']}
-
-#CORS_ORIGIN_ALLOW_ALL = True
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'MyFirstApplication.User'

@@ -10,8 +10,27 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from ..decorators import token_required
 
+from django.contrib.auth.decorators import permission_required
+
 
 @api_view(['POST'])
+def create_post(request):
+
+    try:
+        serializer = PostSerializer(data=request.data)
+        user_id = request.data['user_id']
+        user = User.objects.filter(id=user_id)
+        print(request.user.is_active)
+        #if user and request.user.is_activated:
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except User.DoesNotExist:
+        return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
+'''@api_view(['POST'])
 @token_required
 def create_post(request):
     token = request.COOKIES.get('token')
@@ -28,12 +47,11 @@ def create_post(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except User.DoesNotExist:
-        return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)'''
 
 
 
 @api_view(['GET'])
-@token_required
 def get_all_posts(request):
     paginator = PageNumberPagination()
     paginator.page_size = 50

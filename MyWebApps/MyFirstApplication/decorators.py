@@ -9,8 +9,6 @@ def token_required(view_func):
     def _wrapped_view(request, *args, **kwargs):
         token = request.headers.get('Authorization')
 
-        print(request.COOKIES)
-        print(request.headers)
         if not token:
             token = request.COOKIES.get('token')
 
